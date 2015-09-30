@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Zombie Targeting System</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+
+var map;
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 1.757537, lng: 20.566406},
+    zoom: 2
+  });
+
+  var image = 'images/zombie.gif';
+
+  var cities = [
+    {lat: 40.380028, lng: -73.959961},
+    {lat: 35.6895000, lng: 139.6917100},
+    {lat: 39.9075000, lng: 116.3972300},
+    {lat: 51.514125, lng: -.093689},
+    {lat: -26.205171, lng: 28.049815},
+    {lat: 55.7522200, lng: 37.6155600},
+    {lat: -34.6131500, lng: -58.3772300},
+    {lat: 43.7001100, lng: -79.4163000},
+    {lat: -35.2834600, lng: 149.1280700},
+    {lat: -28.0002900, lng: 153.4308800},
+    {lat: -27.4679400, lng: 153.0280900},
+    {lat: -37.8140000, lng: 144.9633200},
+    {lat: -33.8678500, lng: 151.2073200},
+    {lat: -31.9522400, lng: 115.8614000},
+    {lat: -12.4611300, lng: 130.8418500},
+    {lat: 30.0626300, lng: 31.2496700}
+  ]
+
+  for(var i = 0; i < cities.length; i++) {
+    var city = cities[i];
+    var marker = new google.maps.Marker({
+      position: city,
+      map: map,
+      icon: image
+    });
+
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          marker.setIcon("images/boom.jpeg");
+        }
+      })(marker, i));
+  }
+  
+}
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAROntgGXnIHuh7qjgL9-er3oIkkisoLh4&callback=initMap"
+        async defer></script>
+  </body>
+</html>
