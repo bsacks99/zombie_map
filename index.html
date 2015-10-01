@@ -9,9 +9,13 @@
         height: 100%;
         margin: 0;
         padding: 0;
+        background-color: black;
       }
       #map {
-        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        height: 768px;
+        width: 1024px;
       }
     </style>
   </head>
@@ -23,10 +27,38 @@ var map;
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 1.757537, lng: 20.566406},
-    zoom: 2
+    zoom: 2,
+    mapTypeId: google.maps.MapTypeId.TERRAIN,
+    disableDefaultUI: true
   });
 
   var image = 'images/zombie.gif';
+
+  var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">Zombie Targeting System</h1>'+
+      '<div id="bodyContent">'+
+      '<p>Click on an infestation marker to send targeting data to Armed forces.</p>'+
+      '</div>'+
+      '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+    content: contentString
+  });
+
+  var infomark = new google.maps.Marker({
+    position: map.getCenter(),
+    map: map,
+    title: 'Instructions',
+    icon: "images/question.png",
+  });
+
+  infowindow.open(map, infomark);
+
+  infomark.addListener('click', function() {
+    infowindow.open(map, infomark);
+  });
 
   var cities = [
     {lat: 40.380028, lng: -73.959961},
@@ -52,14 +84,27 @@ function initMap() {
     var marker = new google.maps.Marker({
       position: city,
       map: map,
-      icon: image
+      icon: image,
+      animation: google.maps.Animation.DROP
     });
 
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
           marker.setIcon("images/boom.jpeg");
         }
-      })(marker, i));
+    })(marker, i));
+
+    google.maps.event.addListener(marker, 'mouseup', (function(marker, i) {
+        return function() {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+          setTimeout(function() {
+            marker.setAnimation(null);
+            marker.setIcon("images/radiation.jpeg");
+          }, 2000);
+        }
+    })(marker, i));
+
+    
   }
   
 }
